@@ -8,7 +8,9 @@ export ZSH=$HOME/.oh-my-zsh
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+[[ -f "$HOME/.oh-my-zsh/custom/themes/spaceship.zsh-theme" ]] && ZSH_THEME="spaceship" || ZSH_THEME="robbyrussell"
+
+SPACESHIP_TIME_SHOW=true
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -70,7 +72,54 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(
+  git
+  git-flow
+
+  mvn
+  gradle
+
+  #wd
+  z
+
+  #zsh-completions
+
+  vagrant
+  extract
+  web-search
+
+  #docker 
+  #docker-compose
+  kubectl
+
+  # javascript
+  npm
+  yarn
+  gulp
+
+  #forgit
+  
+  terraform
+ )
+
+# 3rd party omz plugins
+optionalPlugins=(
+  zsh-syntax-highlighting
+  zsh-autosuggestions
+  you-should-use
+  fast-syntax-highlighting
+  editorconfig
+)
+for plugin in "${optionalPlugins[@]}"
+do
+  [[ -d "$HOME/.oh-my-zsh/custom/plugins/${plugin}" ]] && plugins+=("${plugin}")
+done
+
+command -v fzf >/dev/null 2>&1 && plugins+=("fzf")
+command -v tmux >/dev/null 2>&1 && plugins+=("tmux")
+ 
+# Called here, because it might want to deactivate plugins
+setup_asciinema
 
 source $ZSH/oh-my-zsh.sh
 
@@ -79,7 +128,7 @@ source $ZSH/oh-my-zsh.sh
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
@@ -87,6 +136,7 @@ source $ZSH/oh-my-zsh.sh
 # else
 #   export EDITOR='mvim'
 # fi
+export EDITOR='vim'
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"

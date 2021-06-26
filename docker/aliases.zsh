@@ -1,0 +1,1 @@
+[[ -f ~/.docker_aliases ]] && source ~/.docker_aliases
