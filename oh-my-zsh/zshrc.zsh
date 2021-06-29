@@ -77,10 +77,10 @@ SPACESHIP_NODE_SHOW=false
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
-  git-flow
+  #git-flow
 
   mvn
-  gradle
+  #gradle
 
   #wd
   z
@@ -89,16 +89,15 @@ plugins=(
 
   vagrant
   extract
-  web-search
+  #web-search
 
   #docker 
   #docker-compose
-  kubectl
+  #kubectl
 
   # javascript
-  npm
-  yarn
-  gulp
+  #npm
+  #yarn
 
   #forgit
   
@@ -107,7 +106,7 @@ plugins=(
 
 # 3rd party omz plugins
 optionalPlugins=(
-  zsh-syntax-highlighting
+#  zsh-syntax-highlighting
   zsh-autosuggestions
   you-should-use
   fast-syntax-highlighting
