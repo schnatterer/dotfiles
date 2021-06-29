@@ -11,6 +11,7 @@ export ZSH=$HOME/.oh-my-zsh
 [[ -f "$HOME/.oh-my-zsh/custom/themes/spaceship.zsh-theme" ]] && ZSH_THEME="spaceship" || ZSH_THEME="robbyrussell"
 
 SPACESHIP_TIME_SHOW=true
+SPACESHIP_KUBECTL_SHOW=true
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
