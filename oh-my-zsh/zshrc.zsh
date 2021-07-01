@@ -8,12 +8,7 @@ export ZSH=$HOME/.oh-my-zsh
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-[[ -f "$HOME/.oh-my-zsh/custom/themes/spaceship.zsh-theme" ]] && ZSH_THEME="spaceship" || ZSH_THEME="robbyrussell"
-
-SPACESHIP_TIME_SHOW=true
-SPACESHIP_KUBECTL_SHOW=false
-SPACESHIP_GCLOUD_SHOW=false
-SPACESHIP_NODE_SHOW=false
+[[ -d "$HOME/.oh-my-zsh/custom/themes/powerlevel10k" ]] && ZSH_THEME="powerlevel10k/powerlevel10k" || ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -106,11 +101,9 @@ plugins=(
 
 # 3rd party omz plugins
 optionalPlugins=(
-#  zsh-syntax-highlighting
   zsh-autosuggestions
   you-should-use
   fast-syntax-highlighting
-  editorconfig
 )
 for plugin in "${optionalPlugins[@]}"
 do
