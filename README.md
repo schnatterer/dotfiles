@@ -18,6 +18,12 @@ dotfiles_repo=https://github.com/schnatterer/dotfiles ~/.dotfiles-loader/script/
 Or try the environment they provide in a container
 
 ```shell
+docker run --rm -it ghcr.io/schnatterer/dotfiles
+```
+
+Or if you want to observe the install process:
+
+```shell
 docker run --rm -it \
   -e dotfiles_repo=https://github.com/schnatterer/dotfiles \
   -v $(pwd)/git/gitconfig:/home/dev/.dotfiles-loader/git/gitconfig.local \
