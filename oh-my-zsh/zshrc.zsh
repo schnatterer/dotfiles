@@ -110,13 +110,22 @@ do
   [[ -d "$HOME/.oh-my-zsh/custom/plugins/${plugin}" ]] && plugins+=("${plugin}")
 done
 
+#if ! command -v mcfly >/dev/null 2>&1; then
+#  eval "$(mcfly init zsh)"
+#else 
 command -v fzf >/dev/null 2>&1 && plugins+=("fzf")
+#fi
+
 command -v tmux >/dev/null 2>&1 && plugins+=("tmux")
  
 # Called here, because it might want to deactivate plugins
 setup_asciinema
 
 source $ZSH/oh-my-zsh.sh
+
+#if command -v mcfly >/dev/null 2>&1; then
+#  eval "$(mcfly init zsh)"
+#fi
 
 # User configuration
 
