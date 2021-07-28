@@ -1,4 +1,8 @@
 FROM ghcr.io/schnatterer/dotfiles-loader
+USER root
+RUN apk add tmux
+USER dev 
+
 COPY --chown=1000 . .dotfiles
 # Avoid interactive mode and then re-enable for runtime
 RUN touch .dotfiles-loader/git/gitconfig.local && \
