@@ -3,6 +3,21 @@ Your dotfiles are how you personalize your system. These are mine.
 They follow the general concepts of [holman/dotfiles](https://github.com/holman/dotfiles), but are not forked.  
 Instead they are supposed to be used with [dotfiles-loader](https://github.com/schnatterer/dotfiles-loader).
 
+## Features
+
+* zsh (configured with [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh))  
+  plus a couple of very valuable extra plugins and themes.
+* tmux (inspired from [.tmux](https://github.com/gpakosz/.tmux))
+* vim (configured with [vimrc](https://github.com/amix/vimrc))
+* terraform via [tfenv](https://github.com/tfutils/tfenv)
+* [sdkman](https://sdkman.io/) for java, groovy, maven, gradle, etc.
+* node.js via [nvm](https://github.com/nvm-sh/nvm)
+* bin, pipx and topgrade for installing and upgrading everything.
+  Hints:
+    * Run `topgrade` to upgrade everything regularly.
+    * Use `pipx` to install python-base apps. Other than `pip`, apps installed using `pipx` are also upgraded using topgrade.
+* kubectl and docker aliases galore 
+
 ## Install 
 
 Install them like so:
