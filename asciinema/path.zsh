@@ -1,4 +1,5 @@
 # Use via " asciinema rec -c 'ASCIINEMA_REC=1 TITLE=schnatterer/moby-names-generator $SHELL'"
+# For now, uncomment "exec tmux" to start recording without tmux
 function setup_asciinema() {
 
   if [ "$ASCIINEMA_REC" = "1" ]; then
