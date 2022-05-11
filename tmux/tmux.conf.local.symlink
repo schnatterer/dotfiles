@@ -43,7 +43,7 @@ tmux_conf_new_session_prompt=false
 # RGB 24-bit colour support (tmux >= 2.2), possible values are:
 #  - true
 #  - false (default)
-tmux_conf_24b_colour=false
+tmux_conf_24b_colour=true 
 
 # default theme
 tmux_conf_theme_colour_1="#080808"    # dark gray
@@ -55,7 +55,7 @@ tmux_conf_theme_colour_6="#080808"    # dark gray
 tmux_conf_theme_colour_7="#e4e4e4"    # white
 tmux_conf_theme_colour_8="#080808"    # dark gray
 tmux_conf_theme_colour_9="#ffff00"    # yellow
-tmux_conf_theme_colour_10="#ff00af"   # pink
+tmux_conf_theme_colour_10="#356244"   # dark green
 tmux_conf_theme_colour_11="#5fff00"   # green
 tmux_conf_theme_colour_12="#8a8a8a"   # light gray
 tmux_conf_theme_colour_13="#e4e4e4"   # white
@@ -227,7 +227,10 @@ tmux_conf_theme_right_separator_sub="|"
 #     - #{username}
 #     - #{username_ssh}
 tmux_conf_theme_status_left=" ❐ #S | ↑#{?uptime_y, #{uptime_y}y,}#{?uptime_d, #{uptime_d}d,}#{?uptime_h, #{uptime_h}h,}#{?uptime_m, #{uptime_m}m,} "
-tmux_conf_theme_status_right=" #{prefix}#{mouse}#{pairing}#{synchronized}#{?battery_status,#{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{username}#{root} | #{hostname} "
+#tmux_conf_theme_status_right=" #{prefix}#{mouse}#{pairing}#{synchronized}#{?battery_status,#{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{username}#{root} | #{hostname} "
+#-- mem-mode 2 -> Percent; --averages-count 1
+tmux_conf_theme_status_right=" #{prefix}#{mouse}#{pairing}#{synchronized}, #(/bin/bash $HOME/.tmux/plugins/kube-tmux/kube.tmux 250 red cyan), #[fg=green]#($TMUX_PLUGIN_MANAGER_PATH/tmux-mem-cpu-load/tmux-mem-cpu-load --averages-count 1 --mem-mode 2 --colors --powerline-right --interval 2)#[default], #{?battery_status,#{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{root} "
+set -g status-right "#(/bin/bash $HOME/.tmux/kube.tmux 250 red cyan)"
 
 # status left style
 tmux_conf_theme_status_left_fg="$tmux_conf_theme_colour_6,$tmux_conf_theme_colour_7,$tmux_conf_theme_colour_8"
@@ -320,7 +323,7 @@ tmux_conf_theme_clock_style="24"
 #   - false (default)
 # on macOS, this requires installing reattach-to-user-namespace, see README.md
 # on Linux, this requires xsel or xclip
-tmux_conf_copy_to_os_clipboard=false
+tmux_conf_copy_to_os_clipboard=true
 
 
 # -- user customizations -------------------------------------------------------
@@ -330,7 +333,7 @@ tmux_conf_copy_to_os_clipboard=false
 #set -g history-limit 10000
 
 # start with mouse mode enabled
-#set -g mouse on
+set -g mouse on
 
 # force Vi mode
 #   really you should export VISUAL or EDITOR environment variable, see manual
@@ -390,8 +393,22 @@ tmux_conf_uninstall_plugins_on_reload=true
 #set -g @continuum-restore 'on'
 
 
-# -- custom variables ----------------------------------------------------------
+# MY PLUGINS
+# Reload with Ctrl + B + I
 
+#set -g @plugin 'tmux-plugins/tmux-cpu'
+# u - listing all urls on bottom pane
+# Requires https://github.com/sigpipe/urlview or https://github.com/m3m0ryh0l3/extracturl/
+#set -g @plugin 'tmux-plugins/tmux-urlview'
+# If you have tmux 1.5 or newer and are using xterm, the y in copy-mode and mouse selection will work without tmux-yank.
+#set -g @plugin 'tmux-plugins/tmux-yank'
+# Prints "ep 60; done' not ready>" into the navbar 
+#set -g @plugin 'tmux-plugins/tmux-net-speed'
+set -g @plugin 'thewtex/tmux-mem-cpu-load'
+set -g @plugin 'jonmosco/kube-tmux'
+
+
+# -- custom variables ----------------------------------------------------------
 # to define a custom #{foo} variable, define a POSIX shell function between the
 # '# EOF' and the '# "$@"' lines. Please note that the opening brace { character
 # must be on the same line as the function name otherwise the parse won't detect
