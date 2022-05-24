@@ -2,8 +2,8 @@
 
 if command -v docker-image-sizes.sh >/dev/null 2>&1; then
   # Preferred because of DockerHub rate limiting
-  alias docker-image-size="$(which docker-image-sizes.sh)"
-  alias docker-image-sizes="$(which docker-image-size-docker.sh)"
+  alias docker-image-size="$(which docker-image-size-docker.sh)"
+  alias docker-image-sizes="$(which docker-image-sizes.sh)"
 else 
   # Use Docker if not on PATH
   # cant use gcloud docker auth
