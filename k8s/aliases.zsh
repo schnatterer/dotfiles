@@ -19,3 +19,5 @@ command -v kubecolor >/dev/null 2>&1 && alias kubectl="kubecolor"
 
 alias kx=kubectx
 alias kn=kubens
+
+export USE_GKE_GCLOUD_AUTH_PLUGIN=True
