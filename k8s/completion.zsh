@@ -9,6 +9,10 @@ if command -v kubectl >/dev/null 2>&1; then
   compdef koyaml='kubectl'
   
   command -v kubecolor >/dev/null 2>&1 && compdef kubecolor=kubectl
+  
+  if command -v flux >/dev/null 2>&1; then
+    source <(flux completion zsh)
+  fi
 fi 
 
 [[ -f '/usr/share/google-cloud-sdk/completion.zsh.inc' ]] && source '/usr/share/google-cloud-sdk/completion.zsh.inc'
