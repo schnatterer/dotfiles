@@ -17,3 +17,14 @@ fi
 #alias velero='docker run --rm -u $(id -u):$(id -g) -v ${HOME}:/home -eHOME=/home velero/velero'
 # e.g. regctl tag ls ghcr.io/cloudogu/helm
 alias regctl='docker run --rm ghcr.io/regclient/regctl'
+
+# -C = force color
+alias jq='docker run -i --rm ghcr.io/itchyny/gojq -C'
+
+function pdfcompress() {
+  local INPUT="$1"
+  local OUTPUT="${INPUT//.pdf/.min.pdf}"
+  docker run --rm -v "$(pwd)":/tmp/book --workdir /tmp/book minidocks/ghostscript:9  \
+      -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH \
+      -sOutputFile=- "$INPUT" > "$OUTPUT"
+}
