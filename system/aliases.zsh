@@ -18,6 +18,8 @@ idea() {
   /snap/intellij-idea-ultimate/current/bin/idea.sh "$*"&!
 }
 
+alias code=codium
+
 explorer() {
     nautilus --browser "$*"
 }
