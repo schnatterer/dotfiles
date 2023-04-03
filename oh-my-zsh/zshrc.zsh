@@ -95,6 +95,7 @@ plugins=(
   #yarn
 
   #forgit
+  sdk
   
   terraform
  )

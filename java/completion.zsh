@@ -1,1 +1,1 @@
-command -v sdk >/dev/null 2>&1 && source <(sdk completion bash)
+#command -v sdk >/dev/null 2>&1 && source <(sdk completion bash)
