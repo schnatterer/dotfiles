@@ -23,7 +23,7 @@ alias dive='docker run --rm -it \
 
 
 # -C = force color
-alias jq='docker run -i --rm ghcr.io/itchyny/gojq -C'
+alias jq='docker run -i --rm -v $(pwd):$(pwd) -w $(pwd) ghcr.io/itchyny/gojq -C'
 
 function pdfcompress() {
   local INPUT="$1"
