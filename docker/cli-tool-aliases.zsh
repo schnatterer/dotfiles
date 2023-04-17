@@ -17,6 +17,10 @@ fi
 #alias velero='docker run --rm -u $(id -u):$(id -g) -v ${HOME}:/home -eHOME=/home velero/velero'
 # e.g. regctl tag ls ghcr.io/cloudogu/helm
 alias regctl='docker run --rm ghcr.io/regclient/regctl'
+alias dive='docker run --rm -it \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    wagoodman/dive'
+
 
 # -C = force color
 alias jq='docker run -i --rm ghcr.io/itchyny/gojq -C'
