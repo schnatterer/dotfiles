@@ -15,7 +15,14 @@ fi
 command -v duf >/dev/null 2>&1 && alias df=duf
 
 idea() {
-  /snap/intellij-idea-ultimate/current/bin/idea.sh "$*"&!
+  if [[ -f "$HOME/.local/share/JetBrains/Toolbox/scripts/idea" ]]; then
+    $HOME/.local/share/JetBrains/Toolbox/scripts/idea "$*"&!
+  elif [[ -f "/snap/intellij-idea-ultimate/current/bin/idea.sh" ]]; then
+    /snap/intellij-idea-ultimate/current/bin/idea.sh "$*"&!
+  else 
+    echo "idea not installed"
+    return 1
+  fi
 }
 
 alias code=codium
