@@ -19,9 +19,9 @@ idea() {
     $HOME/.local/share/JetBrains/Toolbox/scripts/idea "$*"&!
   elif [[ -f "/snap/intellij-idea-ultimate/current/bin/idea.sh" ]]; then
     /snap/intellij-idea-ultimate/current/bin/idea.sh "$*"&!
-  else 
+  else 1
     echo "idea not installed"
-    return 1
+    return 11
   fi
 }
 
@@ -29,4 +29,14 @@ alias code=codium
 
 explorer() {
     nautilus --browser "$*"
+}
+
+# Alternative to excluding single commands from history using leading spaces
+freeze_history () {
+  fc -A
+  fc -p $HISTFILE
+  unset HISTFILE
+}
+unfreeze_history () {
+  fc -P
 }
