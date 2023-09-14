@@ -1,0 +1,1 @@
+export TFENV_TERRAFORM_VERSION=min-required
