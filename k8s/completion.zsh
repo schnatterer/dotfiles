@@ -13,6 +13,10 @@ if command -v kubectl >/dev/null 2>&1; then
   if command -v flux >/dev/null 2>&1; then
     source <(flux completion zsh)
   fi
+  
+  if command -v velero >/dev/null 2>&1; then
+    source <(velero completion zsh)
+  fi
 fi 
 
 [[ -f '/usr/share/google-cloud-sdk/completion.zsh.inc' ]] && source '/usr/share/google-cloud-sdk/completion.zsh.inc'
