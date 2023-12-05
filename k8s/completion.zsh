@@ -21,6 +21,13 @@ if command -v kubectl >/dev/null 2>&1; then
   if command -v kustomize >/dev/null 2>&1; then
     source <(kustomize completion zsh)
   fi
+  
+  
+  if command -v kubectl-argo-rollouts >/dev/null 2>&1; then
+    source <(kubectl-argo-rollouts completion zsh)
+  fi
+  
+  
 fi 
 
 [[ -f '/usr/share/google-cloud-sdk/completion.zsh.inc' ]] && source '/usr/share/google-cloud-sdk/completion.zsh.inc'
