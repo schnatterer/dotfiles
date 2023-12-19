@@ -6,6 +6,12 @@ alias json="bat -p --language='json'"
 alias "c=xclip"
 alias "v=xclip -o"
 
+# Safety net for rm
+# I know I shouldn't but lets try it: 
+# https://github.com/andreafrancia/trash-cli/tree/0.23.11.10#can-i-alias-rm-to-trash-put
+# Although the interface of trash-put seems to be compatible with rm, it has different semantics which will cause you problems. For example, while rm requires -R for deleting directories trash-put does not.
+command -v trash-put >/dev/null 2>&1 && alias rm=trash-put
+
 # modern/faster/saner alternatives to common unix commands
 command -v exa >/dev/null 2>&1 && alias ls=exa
 if [[ -f  ~/.config/broot/launcher/bash/br ]]; then
