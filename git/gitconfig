@@ -10,6 +10,10 @@
         editor = vim
 [apply]
         whitespace = nowarn
+[merge]
+    # https://ductile.systems/zdiff3/
+    # https://stackoverflow.com/a/27417871/1845976
+	conflictStyle = zdiff3 
 [mergetool]
         keepBackup = false
 [difftool]
@@ -17,14 +21,35 @@
 [help]
         autocorrect = 1
 [push]
-        # See `git help config` (search for push.default)
-        # for more information on different options of the below setting.
-        #
-        # Setting to git 2.0 default to suppress warning message
-        default = simple
-
+        # Assume local and remote branches have same name 
+        default = current
+[commit]
+    verbose = true
+[pull] # no merge commits on pulling
+    ff = only
+[branch]
+    autosetuprebase = always
+[rerere] # "reuse recorded resolution" for conflicts
+    enabled = true
 [core]
     autocrlf = input
-
 [credential]
     helper = cache --timeout=86400
+
+# Use delta for diffs
+[core]
+    pager = delta
+[interactive]
+    diffFilter = delta --color-only
+[delta]
+    navigate = true    # use n and N to move between diff sections
+    light = false    
+
+#[difftool]
+#        prompt = false
+#
+#[difftool "difftastic"]
+#        cmd = difft "$LOCAL" "$REMOTE"
+#
+#[pager]
+#        difftool = difftastic
