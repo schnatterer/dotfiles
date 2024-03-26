@@ -13,7 +13,7 @@ alias "v=xclip -o"
 command -v trash-put >/dev/null 2>&1 && alias rm=trash-put
 
 # modern/faster/saner alternatives to common unix commands
-command -v exa >/dev/null 2>&1 && alias ls=exa
+command -v eza >/dev/null 2>&1 && alias ls=eza
 if [[ -f  ~/.config/broot/launcher/bash/br ]]; then
   source ~/.config/broot/launcher/bash/br
   command -v br >/dev/null 2>&1 && alias tree=br
