@@ -1,0 +1,1 @@
+export PATH="$(dirname "$(realpath "$0")")/../scripts:${PATH}"

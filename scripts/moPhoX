@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# MotionPhoto Extractor
+
+originalFilePath="$1"
+
+if [[ -z "${originalFilePath}" ]]; then
+    echo "No argument supplied."
+    exit 1
+fi
+
+ofs=$(grep --byte-offset --only-matching --text "ftypmp4\|ftypisom" "${originalFilePath}")
+ofs=${ofs%:*}
+
+if [[ -n "$ofs" ]]; then
+  dd "if=${originalFilePath}" "of=${originalFilePath%.MP.jpg}.mp4" bs=$((ofs - 4)) skip=1
+  
+  if command -v termux-media-scan >/dev/null; then
+    termux-media-scan -r "${originalFilePath%.MP.jpg}.mp4"
+  fi
+  
+  echo "extracted video from motion photo to ${originalFilePath%.MP.jpg}.mp4"
+else
+    echo "No video found in file $originalFilePath"
+    exit 2
+fi
