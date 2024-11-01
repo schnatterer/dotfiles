@@ -24,9 +24,10 @@
         # Assume local and remote branches have same name 
         default = current
 [commit]
-    verbose = true
+    # Show diffs in commit messages
+    # verbose = true
 [pull] # no merge commits on pulling
-    ff = only
+    rebase = true
 [branch]
     autosetuprebase = always
 [rerere] # "reuse recorded resolution" for conflicts
