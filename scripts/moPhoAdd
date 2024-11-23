@@ -1,0 +1,119 @@
+#!/bin/bash
+set -o errexit -o nounset -o pipefail
+BASEDIR=$(dirname $0)
+ABSOLUTE_BASEDIR="$(cd $BASEDIR && pwd)"
+source "${ABSOLUTE_BASEDIR}/moPhoLib.sh"
+
+# MotionPhoto Add
+
+# TODO allow for configuring direct deletion, when not on android?
+#DELETE_BACKUP_IN_DAYS=${DELETE_BACKUP_IN_DAYS:-30}
+
+function main() {
+  local inputFile="$1"
+  local originalInputFile="$1" # inputFile might change along the way
+  local videoFile="$2"
+  local extractedVideo=''
+  local inputWithoutVideo=''
+
+  if [ "$#" -ne 2 ]; then
+    echo 'Error: Exactly two arguments are required: moPhoAdd inputFile videoFile'
+    exit 1
+  fi
+
+  if isMotionPhoto "${inputFile}"; then
+    echo "File ${inputFile} already contains motionPhoto. Removing."
+    "${ABSOLUTE_BASEDIR}/moPhoRm" "${inputFile}"
+    inputFile="${inputFile//.MP/}"
+    inputWithoutVideo="${inputFile}"
+    echo
+  fi
+
+  if isMotionPhoto "${videoFile}"; then
+    echo "File ${videoFile} is a motionPhoto. Extracting."
+    "${ABSOLUTE_BASEDIR}/moPhoX" "${videoFile}"
+    videoFile="${videoFile%.MP.jpg}.mp4"
+    extractedVideo="${videoFile}"
+    echo
+  fi
+
+  echo "Adding motionPhoto ${videoFile} to ${inputFile}"
+  # Xmp Tags
+  # Xmp.Container.Directory[3]                   XmpText     0  type="Struct"
+  #Xmp.Container.Directory[3]/Container:Item    XmpText     0  type="Struct"
+  #Xmp.Container.Directory[3]/Container:Item/Item:Mime XmpText     9  video/mp4
+  #Xmp.Container.Directory[3]/Container:Item/Item:Semantic XmpText    11  MotionPhoto
+  #Xmp.Container.Directory[3]/Container:Item/Item:Length XmpText     7  4391981
+  #Xmp.Container.Directory[3]/Container:Item/Item:Padding XmpText     1  0
+  # Xmp.GCamera.MotionPhoto                      XmpText     1  1
+  #Xmp.GCamera.MotionPhotoVersion               XmpText     1  1
+  #Xmp.GCamera.MotionPhotoPresentationTimestampUs XmpText     7  1157441
+
+  #  https://github.com/GrapheneOS/Camera/issues/75
+
+  # https://github.com/deckerst/aves/blob/be1e96270b295c2db4c2ec9e36510e009f6513e5/lib/ref/metadata/xmp.dart#L29
+  # https://github.com/deckerst/aves/blob/be1e96270b295c2db4c2ec9e36510e009f6513e5/test/utils/xmp_utils_test.dart#L95
+  #
+  # Show namespace in file:  exiv2 -pX a.jpg
+  # https://developer.android.com/media/platform/motion-photo-format
+
+  # https://github.com/dj0001/Motion-Photo-Viewer?tab=readme-ov-file
+  # TODO What happens if tags are already there?
+  # TODO Some files fail with: No namespace info available for XMP prefix `Container_1_'
+  # Register namespaces first, before trying to use them
+  exiv2 \
+    --Modify "reg GCamera http://ns.google.com/photos/1.0/camera/" \
+    --Modify "add Xmp.GCamera.MotionPhoto 1" \
+    --Modify "add Xmp.GCamera.MotionPhotoVersion 1" \
+    --Modify "add Xmp.GCamera.MotionPhotoPresentationTimestampUs $(date -d "$(stat -c %y "${inputFile}")" +%s)" \
+    --Modify "reg Container http://ns.google.com/photos/1.0/container/" \
+    --Modify "reg Item http://ns.google.com/photos/1.0/container/item/" \
+    --Modify "add Xmp.Container.Directory[3]/Container:Item/Item:Mime XmpText video/mp4" \
+    --Modify "add Xmp.Container.Directory[3]/Container:Item/Item:Semantic XmpText MotionPhoto" \
+    --Modify "add Xmp.Container.Directory[3]/Container:Item/Item:Length XmpText $(stat -c %s "${videoFile}")" \
+    --Modify "add Xmp.Container.Directory[3]/Container:Item/Item:Padding XmpText 0" \
+    "${inputFile}"
+
+  outputFile="$(createOutputFile "${inputFile}")"
+  # If input and output are equal (both motion photos),
+  # input already was a motion photo and therefore has been deleted at the beginning (on extraction)
+
+  # Append video. Use temp in case input and output are the same
+  temp="$(mktemp)"
+  cat "${inputFile}" "${videoFile}" > "${temp}"
+  mv "${temp}" "${outputFile}"
+  #  Keep timestamp
+  touch -d "$(stat -c %y "${inputFile}")" "${outputFile}"
+
+  # Cleanup
+  if [[ "${originalInputFile}" != "${outputFile}" ]]; then
+    local trashedPath=$(rmFile "${inputFile}")
+    echo "Moved original image to ${trashedPath}, to be deleted in ${DELETE_BACKUP_IN_DAYS} days"
+  fi
+  if [[ "${extractedVideo}" != '' ]]; then
+    local trashedPath=$(rmFile "${extractedVideo}")
+    #echo "Moved temporay extracted video to ${trashedPath}, to be deleted in ${DELETE_BACKUP_IN_DAYS} days"
+  fi
+  if [[ "${inputWithoutVideo}" != '' ]]; then
+    local trashedPath=$(rmFile "${inputWithoutVideo}")
+    #echo "Moved temporary input image without videos to ${trashedPath}, to be deleted in ${DELETE_BACKUP_IN_DAYS} days"
+  fi
+
+  echo "Wrote new motion photo file: ${outputFile}"
+}
+
+function createOutputFile() {
+  local filename="$1"
+
+  if [[ "${filename}" != *.MP.jpg ]]; then
+    # Remove any existing extension and add .MP.jpg
+    filename="${filename%.*}.MP.jpg"
+  else
+    # This is just a precaution
+    echo "Input an output filename are the same. Exiting: ${filename}"
+  fi
+
+  echo "${filename}"
+}
+
+main "$@"

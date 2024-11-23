@@ -1,6 +1,5 @@
 #!/bin/bash
 set -o errexit -o nounset -o pipefail
-
 # MotionPhoto Extractor
 
 originalFilePath="$1"
@@ -10,24 +9,19 @@ if [[ -z "${originalFilePath}" ]]; then
     exit 1
 fi
 
-# Locate the beginning of the video
-ofs=$(grep --byte-offset --only-matching --text "ftypmp4\|ftypisom" "${originalFilePath}"  || true)
-# 3681584:ftypisom -> 3681584
-ofs=${ofs%:*}
+BASEDIR=$(dirname $0)
+ABSOLUTE_BASEDIR="$(cd $BASEDIR && pwd)"
+source "${ABSOLUTE_BASEDIR}/moPhoLib.sh"
 
-if [[ -n "$ofs" ]] && [[ "$ofs" != 0 ]]; then
-  # Copy from ftyp (4 bytes before ofs) to outputfile, skip header
-  # Alternative:
-  # EXIF: Directory Item Length 
-  # bs={filelen-Directory Item Length}
-  # https://github.com/GrapheneOS/Camera/issues/75
-  dd "if=${originalFilePath}" "of=${originalFilePath%.MP.jpg}.mp4" bs=$((ofs - 4)) skip=1
+if isMotionPhoto "${originalFilePath}"; then
+  newFilePath="${originalFilePath%.MP.jpg}.mp4"
+  extractVideo "${originalFilePath}" "${newFilePath}"
   
   if command -v termux-media-scan >/dev/null; then
-    termux-media-scan -r "${originalFilePath%.MP.jpg}.mp4"
+    termux-media-scan -r "${newFilePath}"
   fi
   
-  echo "extracted video from motion photo to ${originalFilePath%.MP.jpg}.mp4"
+  echo "extracted video from motion photo to ${newFilePath}"
 else
     echo "No video found in file $originalFilePath"
     exit 2

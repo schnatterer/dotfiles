@@ -4,41 +4,33 @@ set -o errexit -o nounset -o pipefail
 # MotionPhoto Remover
 # Note that this does not remove the metadata (EXIV/XMP) for motion photos
 
-DELETE_BACKUP_IN_DAYS=30
-
 originalFilePath="$1"
+#DELETE_BACKUP_IN_DAYS=${DELETE_BACKUP_IN_DAYS:-30}
 
 if [[ -z "${originalFilePath}" ]]; then
     echo "No argument supplied."
     exit 1
 fi
 
-# Locate the beginning of the video
-ofs=$(grep --byte-offset --only-matching --text "ftypmp4\|ftypisom" "${originalFilePath}" || true)
-ofs=${ofs%:*}
+BASEDIR=$(dirname $0)
+ABSOLUTE_BASEDIR="$(cd $BASEDIR && pwd)"
+source "${ABSOLUTE_BASEDIR}/moPhoLib.sh"
 
-if [[ -n "$ofs" ]] && [[ "$ofs" != 0 ]]; then
+if isMotionPhoto "${originalFilePath}"; then
   newFilePath="${originalFilePath//.MP/}"
   rsync -a "$originalFilePath" "${newFilePath}"
 
-  ofs=$(grep --byte-offset --only-matching --text "ftypmp4\|ftypisom" "${newFilePath}")
-  ofs=${ofs%:*}
-
+  ofs=$(findOffset "${newFilePath}")
   truncate -s $((ofs - 4)) "${newFilePath}"
 
-  folder=$(dirname "${originalFilePath}")
-  baseFileName=$(basename "${originalFilePath}")
-  deletionDate="$(($(date +%s) + "$DELETE_BACKUP_IN_DAYS" * 86400))"
-  trashedPath="${folder}/.trashed-${deletionDate}-${baseFileName}"
-  mv "${originalFilePath}" "${trashedPath}"
-
+  trashedPath=$(rmFile "${originalFilePath}")
+  
   if command -v termux-media-scan >/dev/null; then
-    termux-media-scan "${newFilePath}" "$trashedPath" >/dev/null
+    termux-media-scan "${newFilePath}" "${trashedPath}" >/dev/null
   fi
   
   echo "Removed video from motion photo ${newFilePath}"
-  echo
-  echo "Moved original to $trashedPath, to be deleted in $DELETE_BACKUP_IN_DAYS days"
+  echo "Moved original to ${trashedPath}, to be deleted in ${DELETE_BACKUP_IN_DAYS} days"
 else
     echo "No video found in file $originalFilePath"
     exit 2
