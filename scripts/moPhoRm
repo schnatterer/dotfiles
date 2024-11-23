@@ -13,17 +13,15 @@ if [[ -z "${originalFilePath}" ]]; then
     exit 1
 fi
 
-# Locate the beginning of the video
-ofs=$(grep --byte-offset --only-matching --text "ftypmp4\|ftypisom" "${originalFilePath}" || true)
-ofs=${ofs%:*}
+BASEDIR=$(dirname $0)
+ABSOLUTE_BASEDIR="$(cd $BASEDIR && pwd)"
+source "${ABSOLUTE_BASEDIR}/moPhoLib.sh"
 
-if [[ -n "$ofs" ]] && [[ "$ofs" != 0 ]]; then
+if isMotionPhoto "${originalFilePath}"; then
   newFilePath="${originalFilePath//.MP/}"
   rsync -a "$originalFilePath" "${newFilePath}"
 
-  ofs=$(grep --byte-offset --only-matching --text "ftypmp4\|ftypisom" "${newFilePath}")
-  ofs=${ofs%:*}
-
+  ofs=$(findOffset "${newFilePath}")
   truncate -s $((ofs - 4)) "${newFilePath}"
 
   folder=$(dirname "${originalFilePath}")
