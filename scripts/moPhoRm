@@ -1,6 +1,8 @@
 #!/bin/bash
+set -o errexit -o nounset -o pipefail
 
 # MotionPhoto Remover
+# Note that this does not remove the metadata (EXIV/XMP) for motion photos
 
 DELETE_BACKUP_IN_DAYS=30
 
@@ -11,10 +13,11 @@ if [[ -z "${originalFilePath}" ]]; then
     exit 1
 fi
 
-ofs=$(grep --byte-offset --only-matching --text "ftypmp4\|ftypisom" "${originalFilePath}")
+# Locate the beginning of the video
+ofs=$(grep --byte-offset --only-matching --text "ftypmp4\|ftypisom" "${originalFilePath}" || true)
 ofs=${ofs%:*}
 
-if [[ -n "$ofs" ]]; then
+if [[ -n "$ofs" ]] && [[ "$ofs" != 0 ]]; then
   newFilePath="${originalFilePath//.MP/}"
   rsync -a "$originalFilePath" "${newFilePath}"
 
@@ -33,7 +36,7 @@ if [[ -n "$ofs" ]]; then
     termux-media-scan "${newFilePath}" "$trashedPath" >/dev/null
   fi
   
-  echo "Removed video from motion photo  ${newFilePath}"
+  echo "Removed video from motion photo ${newFilePath}"
   echo
   echo "Moved original to $trashedPath, to be deleted in $DELETE_BACKUP_IN_DAYS days"
 else
