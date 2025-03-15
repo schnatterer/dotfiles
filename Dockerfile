@@ -1,6 +1,6 @@
 FROM ghcr.io/schnatterer/dotfiles-loader
 USER root
-RUN apk add tmux
+RUN apk add tmux curl
 USER dev 
 
 COPY --chown=1000 . .dotfiles
