@@ -8,7 +8,11 @@ export ZSH=$HOME/.oh-my-zsh
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-[[ -d "$HOME/.oh-my-zsh/custom/themes/powerlevel10k" && -z "$ASCIINEMA_REC" ]] && ZSH_THEME="powerlevel10k/powerlevel10k" || ZSH_THEME="robbyrussell"
+if command -v starship >/dev/null 2>&1 && [[ -z "${ASCIINEMA_REC}" ]]; then
+  ZSH_THEME=''
+else
+  ZSH_THEME="robbyrussell"
+fi
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -155,3 +159,5 @@ export EDITOR='vim'
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+command -v starship >/dev/null 2>&1 && [[ -z "${ASCIINEMA_REC}" ]] && eval "$(starship init zsh)"

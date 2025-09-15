@@ -1,0 +1,26 @@
+# See
+# https://starship.rs/presets/
+# https://starship.rs/config/
+
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Disable the cloud modules (removes cloud project info)
+[gcloud]
+disabled = true
+
+[aws]
+disabled = true
+
+[azure]
+disabled = true
+
+# Disable the nodejs module (removes Node.js version)
+[nodejs]
+disabled = true
+
+[time]
+disabled = false                # Enable the time module
+# Don't show leading "at"
+format = "[$time]($style) "     # Format for displaying time
+time_format = "%H:%M:%S"        # 24-hour format with seconds
