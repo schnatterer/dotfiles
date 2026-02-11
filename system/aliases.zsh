@@ -22,9 +22,10 @@ command -v duf >/dev/null 2>&1 && alias df=duf
 
 idea() {
   if [[ -f "$HOME/.local/share/JetBrains/Toolbox/scripts/idea" ]]; then
-    $HOME/.local/share/JetBrains/Toolbox/scripts/idea "$*"&!
+    $HOME/.local/share/JetBrains/Toolbox/scripts/idea "$*" > /dev/null 2>&1 &!
+    # &! or &| -> disown
   elif [[ -f "/snap/intellij-idea-ultimate/current/bin/idea.sh" ]]; then
-    /snap/intellij-idea-ultimate/current/bin/idea.sh "$*"&!
+    /snap/intellij-idea-ultimate/current/bin/idea.sh "$*" > /dev/null 2>&1 &!
   else 1
     echo "idea not installed"
     return 11
