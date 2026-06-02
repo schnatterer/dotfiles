@@ -5,6 +5,7 @@ alias json="bat -p --language='json'"
 
 alias "c=xclip"
 alias "v=xclip -o"
+alias "xo=xdg-open"
 
 # Safety net for rm
 # I know I shouldn't but lets try it: 
