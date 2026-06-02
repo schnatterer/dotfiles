@@ -3,8 +3,8 @@ alias watch='watch '
 alias yaml="bat -p --language='yaml'"
 alias json="bat -p --language='json'"
 
-alias "c=xclip"
-alias "v=xclip -o"
+alias "c=xclip -sel clip"
+alias 'v=xclip -sel clip -o || echo ""'
 alias "xo=xdg-open"
 
 # Safety net for rm
