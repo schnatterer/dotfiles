@@ -105,11 +105,13 @@ plugins=(
  )
 
 # 3rd party omz plugins
+# Install like so, for example: git clone https://github.com/wfxr/forgit.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/forgit
 optionalPlugins=(
-  you-should-use
-  fast-syntax-highlighting
+  you-should-use # https://github.com/MichaelAquilina/zsh-you-should-use
+  zsh-fast-syntax-highlighting # https://github.com/zdharma-continuum/fast-syntax-highlighting
+  forgit # https://github.com/wfxr/forgit
 )
-[[ -z "$ASCIINEMA_REC" ]] && optionalPlugins+=("zsh-autosuggestions")
+[[ -z "$ASCIINEMA_REC" ]] && optionalPlugins+=("zsh-autosuggestions") # https://github.com/zsh-users/zsh-autosuggestions
 
 for plugin in "${optionalPlugins[@]}"
 do
